@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <title>智慧灯杆</title>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+  <!-- Custom Styles theme -->
+  <link rel="stylesheet" href="{{ url_for('static',filename='style.css') }}">
+</head>
+
+<body>
+  <div class="container">
+    <!-- Nav Bar -->
+    <nav class="navbar navbar-inverse navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <div class="navbar-header">
+            <a class="navbar-brand" href="#">
+					<img alt="Paho" src="{{ url_for('static',filename='paho-small-logo.png') }}">
+            </a>
+            <span class="navbar-brand">Smart</span>
+          </div>
+          <ul class="nav navbar-nav">
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <!-- Nav Bar End -->
+
+    <!-- Local Storage GDPR Warning -->
+
+    <!-- End of Local Storage GDPR Warning -->
+
+    <!-- Connection panel -->
+	<div class="row">
+			<div class="col-md-12">
+					<div class="panel panel-default">
+							<div class="panel-heading">
+									<span id="connectionStatus">Connection - Disconnected.</span>
+							</div>
+							<div class="panel-body" id="serverCollapse">
+									<form>
+											<label>OLED</label> 
+											<textarea class="form-control" id="myoled" rows="3" cols="10">Test Message.</textarea>
+											<button id="oled_button" type="button" class "btn btn-default" onclick = "oledPublish();">Publish</button>
+									</form>
+							</div>
+					</div>
+			</div>
+	</div>
+  <!-- End of Connection panel -->
+
+
+  <div class="row ">
+    <!-- Subscription panel -->
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">camera</div>
+		<div class="panel-body">
+			<img src="http://192.168.1.102:8080?action=stream" height=393px/>
+		</div>
+      </div>
+    </div>
+    <!-- End of Subscription panel -->
+
+    <!-- Publish panel -->
+		<script>
+		</script>
+    <div class="col-md-6">
+      <div class="panel panel-default">
+        <div class="panel-heading">led-t-h-button</div>
+        <div class="panel-body" id="publishCollapse">
+				<img id="myled0" onclick="changeLed()" src="{{ url_for('static',filename='pic_bulboff.gif') }}" width="50" height="90" >
+				<img id="myimage1" onclick="changeImage1()" src="{{ url_for('static',filename='pic_bulboff.gif') }}" width="50" height="90">
+				<img id="myimage2" onclick="changeImage2()" src="{{ url_for('static',filename='pic_bulboff.gif') }}" width="50" height="90">
+				<form>
+						<br>
+						<label>T: <span id="myt">t</span> </label>
+						<br>
+						<label>H: <span id="myh">h</span> </label>
+						<br>
+						<label>BUTTON: <span id="mybutton">button</span> </label>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<br>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+				</form>
+        </div>
+      </div>
+    </div>
+    <!-- End of Publish panel -->
+  </div>
+
+
+  
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+						<hr>
+  <div class="row">
+
+
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a class="chevron-toggle" data-toggle="collapse" data-target="#subscriptionsCollapse" href="#collapseOne">
+                        Last Messages
+                    </a>
+        </div>
+        <div class="panel-body collapse in fixed-height-panel" id="subscriptionsCollapse">
+          <table class="table table-hover table-condensed tableSection" id="lastMessageTable">
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Payload</th>
+                <th>Time</th>
+                <th>QoS</th>
+              </tr>
+            </thead>
+            <tbody>
+
+            </tbody>
+
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a class="chevron-toggle" data-toggle="collapse" data-target="#historyCollapse" href="#collapseOne">
+                        History
+                        </a>
+        </div>
+        <div class="panel-body collapse in fixed-height-panel" id="historyCollapse">
+          <span class="right"><a href="#" onclick="clearHistory()">Clear History</a></span>
+          <table class="table table-hover table-condensed  tableSection" id="incomingMessageTable">
+
+            <thead>
+              <tr>
+                <th>Topic</th>
+                <th>Payload</th>
+                <th>Time</th>
+                <th>Qos</th>
+              </tr>
+            </thead>
+            <tbody></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="row">
+
+    <div class="col-md-12">
+      <div class="panel panel-default">
+        <div class="panel-heading">
+          <a class="chevron-toggle" data-toggle="collapse" data-target="#consoleCollapse" href="#collapseOne">
+                        Console
+                        </a>
+        </div>
+        <div class="panel-body collapse in fixed-height-panel-pre" id="consoleCollapse">
+          <pre id="consolePre" class="pre-scrollable"></pre>
+        </div>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <!-- Source Paho MQTT Client-->
+  <script src="{{ url_for('static',filename='paho-mqtt.js') }}"></script>
+  <!--<script src="../src/paho-mqtt.js"></script>-->
+
+  <!-- Utility Javascript -->
+  <script src="{{ url_for('static',filename='utility.js') }}"></script>
+
+  <!-- Javascript used for Bootstrap Theme -->
+  <!-- 谷歌的，用不了<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script> -->
+  <!-- <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script> -->
+</body>
+
+</html>
